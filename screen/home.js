@@ -1,14 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+// HomeScreen.js
+
+import React, { useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   FlatList,
   Modal,
   TouchableOpacity,
   Switch,
 } from "react-native";
+import HeaderHome from "../components/Header-home";
+import CarouselHome from "../components/Carousel-home";
 
 const data = [
   { id: "1", name: "Restaurante A" },
@@ -18,26 +21,15 @@ const data = [
   { id: "5", name: "Restaurante E" },
 ];
 
-const colors = ["#32CD32", "#1E90FF", "#FF6347"]; // Verde, Azul, Vermelho
+const images = [
+  require("../assets/prato1.jpg"),
+  require("../assets/prato2.jpg"),
+  require("../assets/prato3.jpg"),
+];
 
 const HomeScreen = () => {
-  const scrollRef = useRef();
   const [isModalVisible, setModalVisible] = useState(false);
   const [darkTheme, setDarkTheme] = useState(false);
-
-  const autoScroll = () => {
-    let index = 0;
-    setInterval(() => {
-      if (scrollRef.current) {
-        scrollRef.current.scrollTo({ x: index * 300, animated: true });
-        index = (index + 1) % colors.length; // Cicla entre as cores
-      }
-    }, 2000); // Troca a cada 2 segundos
-  };
-
-  useEffect(() => {
-    autoScroll();
-  }, []);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -54,24 +46,8 @@ const HomeScreen = () => {
         { backgroundColor: darkTheme ? "#333" : "#f5f5f5" },
       ]}
     >
-      <TouchableOpacity onPress={toggleModal} style={styles.settingsButton}>
-        <Text style={styles.settingsText}>⚙️</Text>
-      </TouchableOpacity>
-
-      <ScrollView
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        style={styles.carousel}
-        ref={scrollRef}
-      >
-        {colors.map((color, index) => (
-          <View
-            key={index}
-            style={[styles.carouselItem, { backgroundColor: color }]}
-          />
-        ))}
-      </ScrollView>
+      <HeaderHome toggleModal={toggleModal} />
+      <CarouselHome images={images} />
 
       <View style={styles.storeContainer}>
         <Text style={styles.storeHeader}>Lojas de Comida</Text>
@@ -97,12 +73,10 @@ const HomeScreen = () => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Configurações</Text>
-
             <View style={styles.option}>
               <Text style={styles.optionText}>Tema Escuro</Text>
               <Switch value={darkTheme} onValueChange={toggleTheme} />
             </View>
-
             <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
               <Text style={styles.closeButtonText}>Fechar</Text>
             </TouchableOpacity>
@@ -119,16 +93,6 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingHorizontal: 16,
     backgroundColor: "#f5f5f5",
-  },
-  carousel: {
-    height: 150,
-    marginBottom: 16,
-  },
-  carouselItem: {
-    width: 300,
-    height: 150,
-    justifyContent: "center",
-    alignItems: "center",
   },
   storeContainer: {
     marginTop: 16,
@@ -155,15 +119,6 @@ const styles = StyleSheet.create({
   },
   row: {
     justifyContent: "space-between",
-  },
-  settingsButton: {
-    position: "absolute",
-    top: 20,
-    right: 20,
-    padding: 10,
-  },
-  settingsText: {
-    fontSize: 24,
   },
   modalOverlay: {
     flex: 1,
