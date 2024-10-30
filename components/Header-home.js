@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 const HeaderHome = ({ toggleModal }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Meu App</Text>
+      <Text style={styles.title}>Agil Delivery</Text>
       <TouchableOpacity onPress={toggleModal} style={styles.settingsButton}>
         <Text style={styles.settingsText}>⚙️</Text>
       </TouchableOpacity>
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    color: "#ff6f61",
   },
   settingsButton: {
     padding: 10,

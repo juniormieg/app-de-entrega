@@ -1,5 +1,3 @@
-// SettingsModal.js
-
 import React from "react";
 import {
   View,
@@ -10,22 +8,22 @@ import {
   StyleSheet,
 } from "react-native";
 
-const SettingsModal = ({ isVisible, toggleModal, darkTheme, toggleTheme }) => {
+const SettingsModal = ({ visible, onClose, darkTheme, onToggleTheme }) => {
   return (
     <Modal
       animationType="slide"
       transparent={true}
-      visible={isVisible}
-      onRequestClose={toggleModal}
+      visible={visible}
+      onRequestClose={onClose}
     >
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
           <Text style={styles.modalTitle}>Configurações</Text>
           <View style={styles.option}>
             <Text style={styles.optionText}>Tema Escuro</Text>
-            <Switch value={darkTheme} onValueChange={toggleTheme} />
+            <Switch value={darkTheme} onValueChange={onToggleTheme} />
           </View>
-          <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
+          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>Fechar</Text>
           </TouchableOpacity>
         </View>

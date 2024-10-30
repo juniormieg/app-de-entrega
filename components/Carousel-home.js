@@ -1,38 +1,37 @@
-// CarouselHome.js
-
-import React from "react";
-import { View, Image, StyleSheet, FlatList, Dimensions } from "react-native";
-
-const { width } = Dimensions.get("window");
+import React, { useState, useEffect } from "react";
+import { View, Image, StyleSheet, Dimensions } from "react-native";
 
 const CarouselHome = ({ images }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const screenWidth = Dimensions.get("window").width;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000); // Altera a imagem a cada 3 segundos
+
+    return () => clearInterval(interval);
+  }, [images.length]);
+
   return (
-    <FlatList
-      data={images}
-      horizontal
-      pagingEnabled
-      showsHorizontalScrollIndicator={false}
-      keyExtractor={(item, index) => index.toString()}
-      renderItem={({ item }) => (
-        <View style={styles.imageContainer}>
-          <Image source={item} style={styles.image} />
-        </View>
-      )}
-    />
+    <View style={styles.container}>
+      <Image
+        source={images[currentIndex]}
+        style={[styles.image, { width: screenWidth * 0.9 }]}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  imageContainer: {
-    width: width * 0.9,
-    height: 200,
-    justifyContent: "center",
+  container: {
+    width: "100%",
+    height: 180,
     alignItems: "center",
-    marginHorizontal: width * 0.05, // Margem para centralizar
   },
   image: {
-    width: "100%",
     height: "100%",
+    resizeMode: "cover",
     borderRadius: 10,
   },
 });

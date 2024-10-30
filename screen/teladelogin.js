@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   TextInput,
-  Button,
   Text,
   StyleSheet,
   TouchableOpacity,
@@ -11,7 +10,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "../firebase"; // Verifique se este caminho está correto
+import { auth } from "../firebase";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -20,29 +19,24 @@ export default function LoginScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = () => {
-    setError(""); // Reseta o erro antes de tentar o login
+    setError("");
+    if (!email || !password) {
+      setError("Por favor, preencha todos os campos.");
+      return;
+    }
 
-    // Tenta fazer login
+    console.log("Tentando login com:", email, password); // Verifique os valores aqui
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        // Se o login for bem-sucedido, redireciona para a Home
-        navigation.replace("Home");
-      })
+      .then(() => navigation.replace("Home"))
       .catch((loginError) => {
-        console.error("Erro no login:", loginError);
-        // Se o usuário não for encontrado, tenta criar um novo usuário
+        console.log("Erro no login:", loginError); // Verifique o erro aqui
         if (loginError.code === "auth/user-not-found") {
           createUserWithEmailAndPassword(auth, email, password)
-            .then(() => {
-              // Usuário criado com sucesso, redireciona para a Home
-              navigation.replace("Home");
-            })
-            .catch((signupError) => {
-              console.error("Erro ao criar usuário:", signupError);
-              setError("Falha ao cadastrar: " + signupError.message);
-            });
+            .then(() => navigation.replace("Home"))
+            .catch((signupError) =>
+              setError("Falha ao cadastrar: " + signupError.message)
+            );
         } else {
-          // Se houver outro tipo de erro, exibe mensagem de erro
           setError("Falha no login: " + loginError.message);
         }
       });
@@ -50,9 +44,11 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Bem-vindo à Ágil Delivery!</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
+        placeholderTextColor="#aaa"
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
@@ -61,6 +57,7 @@ export default function LoginScreen({ navigation }) {
         <TextInput
           style={styles.input}
           placeholder="Senha"
+          placeholderTextColor="#aaa"
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!showPassword}
@@ -70,7 +67,9 @@ export default function LoginScreen({ navigation }) {
         </TouchableOpacity>
       </View>
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      <Button title="Login ou Cadastrar" onPress={handleLogin} />
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -80,18 +79,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 16,
-    backgroundColor: "#f5f5f5",
+    padding: 20,
+    backgroundColor: "#f0f5f5",
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#2c3e50",
+    marginBottom: 20,
+    textAlign: "center",
   },
   input: {
     width: "100%",
     height: 50,
-    borderColor: "#ccc",
+    borderColor: "#ddd",
     borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
+    borderRadius: 10,
+    paddingHorizontal: 15,
     marginBottom: 15,
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
+    fontSize: 16,
   },
   passwordContainer: {
     flexDirection: "row",
@@ -100,10 +107,25 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     marginLeft: 10,
-    fontSize: 24,
+    fontSize: 20,
+    color: "#888",
   },
   errorText: {
-    color: "red",
+    color: "#e74c3c",
     marginBottom: 10,
+  },
+  button: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#ff6f61",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
