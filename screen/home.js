@@ -12,7 +12,6 @@ const images = [
 ];
 
 const HomeScreen = ({ navigation }) => {
-  // Adicione a prop de navegação aqui
   const [isModalVisible, setModalVisible] = useState(false);
   const [darkTheme, setDarkTheme] = useState(false);
 
@@ -35,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
         onClose={toggleModal}
         darkTheme={darkTheme}
         onToggleTheme={toggleTheme}
-        navigation={navigation} // Passe a navegação aqui
+        navigation={navigation}
       />
     </View>
   );

@@ -51,15 +51,13 @@ const Cadastro = ({ navigation }) => {
       );
       const user = userCredential.user;
 
-      // Atualiza o perfil do usuário
       await updateProfile(user, {
         displayName: name,
       });
 
       Alert.alert("Sucesso", "Conta criada com sucesso!");
 
-      // Redirecionar para a tela de login
-      navigation.navigate("Login"); // Certifique-se de que o nome da tela de login esteja correto
+      navigation.navigate("Login");
     } catch (error) {
       console.error("Erro ao registrar:", error);
       if (error.code === "auth/email-already-in-use") {
@@ -140,7 +138,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   button: {
-    backgroundColor: "#ff6f61", // Cor do botão
+    backgroundColor: "#ff6f61",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
