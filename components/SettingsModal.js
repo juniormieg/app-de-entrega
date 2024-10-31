@@ -7,14 +7,24 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { getAuth } from "firebase/auth";
 
 const SettingsModal = ({
   visible,
   onClose,
   darkTheme,
   onToggleTheme,
-  onLogout,
+  navigation,
 }) => {
+  const handleLogout = async () => {
+    try {
+      onClose();
+      navigation.navigate("Login");
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -29,7 +39,7 @@ const SettingsModal = ({
             <Text style={styles.optionText}>Tema Escuro</Text>
             <Switch value={darkTheme} onValueChange={onToggleTheme} />
           </View>
-          <TouchableOpacity onPress={onLogout} style={styles.logoutButton}>
+          <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
             <Text style={styles.logoutButtonText}>Logout</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -72,18 +82,22 @@ const styles = StyleSheet.create({
   logoutButton: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: "#f44336",
+    backgroundColor: "#ff6f61",
     borderRadius: 8,
+    width: "100%",
+    alignItems: "center",
   },
   logoutButtonText: {
     color: "#fff",
     fontWeight: "bold",
   },
   closeButton: {
-    marginTop: 10,
+    marginTop: 20,
     padding: 10,
     backgroundColor: "#2196F3",
     borderRadius: 8,
+    width: "100%",
+    alignItems: "center",
   },
   closeButtonText: {
     color: "#fff",
