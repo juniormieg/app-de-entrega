@@ -25,14 +25,15 @@ export default function LoginScreen({ navigation }) {
       return;
     }
 
-    console.log("Tentando login com:", email, password); // Verifique os valores aqui
     signInWithEmailAndPassword(auth, email, password)
       .then(() => navigation.replace("Home"))
       .catch((loginError) => {
-        console.log("Erro no login:", loginError); // Verifique o erro aqui
         if (loginError.code === "auth/user-not-found") {
           createUserWithEmailAndPassword(auth, email, password)
-            .then(() => navigation.replace("Home"))
+            .then(() => {
+              // Após o cadastro, volta para a tela de login
+              navigation.replace("Login");
+            })
             .catch((signupError) =>
               setError("Falha ao cadastrar: " + signupError.message)
             );
@@ -40,6 +41,10 @@ export default function LoginScreen({ navigation }) {
           setError("Falha no login: " + loginError.message);
         }
       });
+  };
+
+  const handleNavigateToSignup = () => {
+    navigation.navigate("Signup");
   };
 
   return (
@@ -69,6 +74,9 @@ export default function LoginScreen({ navigation }) {
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={handleNavigateToSignup}>
+        <Text style={styles.signupText}>Não tem uma conta? Cadastre-se</Text>
       </TouchableOpacity>
     </View>
   );
@@ -127,5 +135,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  signupText: {
+    marginTop: 15,
+    color: "#2c3e50",
+    fontSize: 16,
   },
 });

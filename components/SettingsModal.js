@@ -8,7 +8,13 @@ import {
   StyleSheet,
 } from "react-native";
 
-const SettingsModal = ({ visible, onClose, darkTheme, onToggleTheme }) => {
+const SettingsModal = ({
+  visible,
+  onClose,
+  darkTheme,
+  onToggleTheme,
+  onLogout,
+}) => {
   return (
     <Modal
       animationType="slide"
@@ -23,6 +29,9 @@ const SettingsModal = ({ visible, onClose, darkTheme, onToggleTheme }) => {
             <Text style={styles.optionText}>Tema Escuro</Text>
             <Switch value={darkTheme} onValueChange={onToggleTheme} />
           </View>
+          <TouchableOpacity onPress={onLogout} style={styles.logoutButton}>
+            <Text style={styles.logoutButtonText}>Logout</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>Fechar</Text>
           </TouchableOpacity>
@@ -60,8 +69,18 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
   },
-  closeButton: {
+  logoutButton: {
     marginTop: 20,
+    padding: 10,
+    backgroundColor: "#f44336",
+    borderRadius: 8,
+  },
+  logoutButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+  closeButton: {
+    marginTop: 10,
     padding: 10,
     backgroundColor: "#2196F3",
     borderRadius: 8,
